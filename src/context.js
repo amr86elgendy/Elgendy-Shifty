@@ -1,17 +1,17 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer } from "react";
 
 // reducer
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'TOGGLE_SIDEBAR':
+    case "TOGGLE_SIDEBAR":
       return { ...state, sidebarOpen: !state.sidebarOpen };
-    case 'SET_DISPLAYED_DATE':
+    case "SET_DISPLAYED_DATE":
       return { ...state, displayedDate: action.payload };
-      case 'TOGGLE_MODAL_FORM':
-        return { ...state, formModalOpen: !state.formModalOpen };
-    case 'ADD_NEW_EMPLOYER':
-      return { ...state, employers: action.payload };
-    case 'REMOVE-EMPLOYER':
+    case "TOGGLE_MODAL_FORM":
+      return { ...state, formModalOpen: !state.formModalOpen };
+    case "ADD_NEW_EMPLOYER":
+      return { ...state, employers: [...state.employers, action.payload] };
+    case "REMOVE-EMPLOYER":
       return { ...state, employers: action.payload };
     default:
       return state;

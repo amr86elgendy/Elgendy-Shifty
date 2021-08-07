@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 export default function BasicTable() {
   const { dispatch, employers } = useAppContext()
   const classes = useStyles();
-
+console.log(employers);
   return (
     <main className='main-content'>
       <TableContainer component={Paper}>
@@ -70,9 +70,9 @@ export default function BasicTable() {
           </TableHead>
           <TableBody>
             {employers.map((emp) => (
-              <TableRow key={emp.name}>
+              <TableRow key={emp.email}>
                 <TableCell component='th' scope='row'>
-                  {emp.name}
+                  {emp.fullName}
                 </TableCell>
                 <TableCell align='center'></TableCell>
                 <TableCell align='center'></TableCell>
