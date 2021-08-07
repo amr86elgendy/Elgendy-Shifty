@@ -7,7 +7,9 @@ const reducer = (state, action) => {
       return { ...state, sidebarOpen: !state.sidebarOpen };
     case 'SET_DISPLAYED_DATE':
       return { ...state, displayedDate: action.payload };
-    case 'ADD_EMPLOYER':
+      case 'TOGGLE_MODAL_FORM':
+        return { ...state, formModalOpen: !state.formModalOpen };
+    case 'ADD_NEW_EMPLOYER':
       return { ...state, employers: action.payload };
     case 'REMOVE-EMPLOYER':
       return { ...state, employers: action.payload };
@@ -19,6 +21,7 @@ const reducer = (state, action) => {
 // initial state
 const initialState = {
   sidebarOpen: false,
+  formModalOpen: false,
   displayedDate: new Date().toDateString(),
   employers: [],
 };

@@ -8,7 +8,13 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Button,
 } from "@material-ui/core";
+import SwapVertIcon from '@material-ui/icons/SwapVert';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import { useAppContext } from '../context';
 
 const useStyles = makeStyles({
   table: {
@@ -16,45 +22,74 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
 export default function BasicTable() {
+  const { dispatch, employers } = useAppContext()
   const classes = useStyles();
 
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell size='small'>Name</TableCell>
-            <TableCell align="center">Early Bird</TableCell>
-            <TableCell align="center">Night Bird</TableCell>
-            <TableCell align='center'>W F H</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
+    <main className='main-content'>
+      <TableContainer component={Paper}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <Button
+                  endIcon={<SwapVertIcon fontSize='large' color='action' />}
+                >
+                  Name
+                </Button>
               </TableCell>
-              <TableCell align="center">{row.calories}</TableCell>
-              <TableCell align="center">{row.fat}</TableCell>
-              <TableCell align="center">{row.carbs}</TableCell>
+              <TableCell align='center'>
+                <Button
+                  startIcon={<RemoveIcon className='icon' color='error' />}
+                  endIcon={<AddIcon className='icon' color='primary' />}
+                >
+                  Early Bird
+                </Button>
+              </TableCell>
+              <TableCell align='center'>
+                <Button
+                  startIcon={<RemoveIcon className='icon' color='error' />}
+                  endIcon={<AddIcon className='icon' color='primary' />}
+                >
+                  Night Bird
+                </Button>
+              </TableCell>
+              <TableCell align='center'>
+                <Button
+                  startIcon={<RemoveIcon className='icon' color='error' />}
+                  endIcon={<AddIcon className='icon' color='primary' />}
+                >
+                  W F H
+                </Button>
+              </TableCell>
+              <TableCell align='right'>
+                <Button>action</Button>
+              </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {employers.map((emp) => (
+              <TableRow key={emp.name}>
+                <TableCell component='th' scope='row'>
+                  {emp.name}
+                </TableCell>
+                <TableCell align='center'></TableCell>
+                <TableCell align='center'></TableCell>
+                <TableCell align='center'></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Button
+        variant='contained'
+        color='primary'
+        endIcon={<PersonAddIcon />}
+        onClick={() => dispatch({ type: 'TOGGLE_MODAL_FORM' })}
+      >
+        new employer
+      </Button>
+    </main>
   );
 }
