@@ -5,8 +5,8 @@ import {
   DialogContent,
   makeStyles,
   Typography,
+  IconButton,
 } from '@material-ui/core';
-import Controls from '../services/Controls';
 import CloseIcon from '@material-ui/icons/Close';
 import { useAppContext } from '../context';
 
@@ -37,12 +37,14 @@ export default function Popup(props) {
           <Typography variant='h6' component='div' style={{ flexGrow: 1 }}>
             {title}
           </Typography>
-          <Controls.ActionButton
-            color='secondary'
-            onClick={() => dispatch({ type: 'TOGGLE_POPUP' })}
+          <IconButton
+            onClick={() => {
+              dispatch({ type: 'TOGGLE_POPUP' });
+              dispatch({ type: 'REMOVE_EMPLOYER_FROM_EDIT' });
+            }}
           >
             <CloseIcon />
-          </Controls.ActionButton>
+          </IconButton>
         </div>
       </DialogTitle>
       <DialogContent dividers>{children}</DialogContent>

@@ -12,6 +12,7 @@ import {
   InputAdornment,
   TableContainer,
   TablePagination,
+  IconButton,
 } from '@material-ui/core';
 import Controls from '../services/Controls';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
@@ -26,7 +27,7 @@ import EmployeeForm from './EmployeeForm';
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    minWidth: 700,
+    minWidth: 750,
     marginTop: theme.spacing(3),
     '& thead th': {
       fontWeight: '600',
@@ -60,8 +61,13 @@ export default function BasicTable() {
   const { dispatch, employers, openPopup } = useAppContext();
   const classes = useStyles();
 
-  const handleEdit = () => {
+  const handleEdit = (id) => {
     dispatch({ type: 'TOGGLE_POPUP' });
+    dispatch({ type: 'SET_EMPLOYER_TO_EDIT', payload: id });
+  };
+
+  const handleRemove = (id) => {
+    dispatch({ type: 'REMOVE_EMPLOYER', payload: id });
   };
 
   const handleChangePage = (event, newPage) => {
@@ -140,20 +146,32 @@ export default function BasicTable() {
           </TableHead>
           <TableBody>
             {dividEmp(employers).map((emp) => (
-              <TableRow key={emp.email}>
+              <TableRow key={emp.id}>
                 <TableCell>
-                  {emp.fullName} <br /> {emp.email}
+                  {emp.fullName} <br /> {emp.department}
                 </TableCell>
                 <TableCell align='center'>{emp.email}</TableCell>
                 <TableCell align='center'>{emp.mobile}</TableCell>
                 <TableCell align='center'>{emp.department}</TableCell>
                 <TableCell align='right'>
-                  <Controls.ActionButton color='primary' onClick={handleEdit}>
+                  {/* <Controls.ActionButton
+                    color='primary'
+                    onClick={() => handleEdit(emp.id)}
+                  >
                     <EditIcon fontSize='small' />
-                  </Controls.ActionButton>
-                  <Controls.ActionButton color='secondary'>
+                  </Controls.ActionButton> */}
+                  {/* <Controls.ActionButton
+                    color='secondary'
+                    onClick={() => handleRemove(emp.id)}
+                  >
                     <CloseIcon fontSize='small' />
-                  </Controls.ActionButton>
+                  </Controls.ActionButton> */}
+                  <IconButton onClick={() => handleEdit(emp.id)}>
+                    <EditIcon fontSize='small' color='primary' />
+                  </IconButton>
+                  <IconButton onClick={() => handleRemove(emp.id)}>
+                    <CloseIcon fontSize='small' color='secondary' />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

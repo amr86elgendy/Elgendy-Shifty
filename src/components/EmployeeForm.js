@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Controls from '../services/Controls';
 import { Grid, makeStyles } from '@material-ui/core';
 import * as employeeService from '../data';
 import { useAppContext } from '../context';
+import { v4 as uuidv4 } from 'uuid';
 
 const initialFValues = {
+  id: uuidv4(),
   fullName: '',
   email: '',
   mobile: '',
@@ -27,7 +29,7 @@ const EmployeeForm = () => {
   const classes = useStyles();
   const [values, setValues] = useState(initialFValues);
   const [errors, setErrors] = useState({});
-  const { dispatch } = useAppContext();
+  const { dispatch, employerEdited } = useAppContext();
 
   const handleInputChange = (e) => {
     let { name, value } = e.target;
@@ -68,12 +70,28 @@ const EmployeeForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate(values)) {
-      dispatch({ type: 'ADD_NEW_EMPLOYER', payload: values });
-      resetForm();
-      dispatch({ type: 'TOGGLE_POPUP' });
+    if (employerEdited) {
+      if (validate(values)) {
+        console.log('edit');
+        dispatch({ type: 'SET_EMPLOYERS_AFTER_EDIT', payload: values });
+        resetForm();
+        dispatch({ type: 'TOGGLE_POPUP' });
+      }
+    } else {
+      if (validate(values)) {
+        dispatch({ type: 'ADD_NEW_EMPLOYER', payload: values });
+        resetForm();
+        dispatch({ type: 'TOGGLE_POPUP' });
+      }
     }
   };
+
+  useEffect(() => {
+    if (employerEdited) {
+      setValues(employerEdited);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <form className={classes.root} autoComplete='off' onSubmit={handleSubmit}>
@@ -117,12 +135,12 @@ const EmployeeForm = () => {
             options={employeeService.getDepartmentCollection()}
             error={errors.department}
           />
-          <Controls.DatePicker
+          {/* <Controls.DatePicker
             name='hireDate'
             label='Hire Date'
             value={values.hireDate}
             onChange={handleInputChange}
-          />
+          /> */}
           <Controls.Checkbox
             name='isPermanent'
             label='Permanent Employee'
@@ -130,7 +148,7 @@ const EmployeeForm = () => {
             onChange={handleInputChange}
           />
           <div>
-            <Controls.Button type='submit' text='Submit' />
+            <Controls.Button type='submit' text={employerEdited ? 'Edit' : 'Submit'} />
             <Controls.Button text='Reset' color='default' onClick={resetForm} />
           </div>
         </Grid>
