@@ -1,43 +1,113 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
   Paper,
   Button,
-} from "@material-ui/core";
+  Toolbar,
+  InputAdornment,
+  TableContainer,
+  TablePagination,
+} from '@material-ui/core';
+import Controls from '../services/Controls';
 import SwapVertIcon from '@material-ui/icons/SwapVert';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { useAppContext } from '../context';
+import { Search } from '@material-ui/icons';
+import EditIcon from '@material-ui/icons/Edit';
+import CloseIcon from '@material-ui/icons/Close';
+import Popup from './Popup';
+import EmployeeForm from './EmployeeForm';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   table: {
-    minWidth: 650,
+    minWidth: 700,
+    marginTop: theme.spacing(3),
+    '& thead th': {
+      fontWeight: '600',
+      color: theme.palette.primary.main,
+      backgroundColor: theme.palette.background.default,
+    },
+    '& tbody td': {
+      fontWeight: '300',
+    },
+    '& tbody tr:hover': {
+      backgroundColor: theme.palette.background.default,
+      cursor: 'pointer',
+    },
   },
-});
+  pageContent: {
+    margin: theme.spacing(5),
+    padding: theme.spacing(3),
+  },
+  searchInput: {
+    width: '75%',
+  },
+  newButton: {
+    position: 'absolute',
+    right: '10px',
+  },
+}));
 
 export default function BasicTable() {
-  const { dispatch, employers } = useAppContext()
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { dispatch, employers, openPopup } = useAppContext();
   const classes = useStyles();
-console.log(employers);
+
+  const handleEdit = () => {
+    dispatch({ type: 'TOGGLE_POPUP' });
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const dividEmp = (arr) => {
+    return arr.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+  };
+
   return (
-    <main className='main-content'>
-      <TableContainer component={Paper}>
+    <Paper className={classes.pageContent}>
+      <Toolbar>
+        <Controls.Input
+          label='Search Employees'
+          className={classes.searchInput}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position='start'>
+                <Search />
+              </InputAdornment>
+            ),
+          }}
+          // onChange={handleSearch}
+        />
+        <Controls.Button
+          text='Add New'
+          // text='new employer'
+          variant='outlined'
+          startIcon={<AddIcon />}
+          // endIcon={<PersonAddIcon />}
+          className={classes.newButton}
+          onClick={() => dispatch({ type: 'TOGGLE_POPUP' })}
+        />
+      </Toolbar>
+      <TableContainer>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
               <TableCell>
-                <Button
-                  endIcon={<SwapVertIcon fontSize='large' color='action' />}
-                >
-                  Name
-                </Button>
+                <Button endIcon={<SwapVertIcon color='action' />}>name</Button>
               </TableCell>
               <TableCell align='center'>
                 <Button
@@ -69,27 +139,41 @@ console.log(employers);
             </TableRow>
           </TableHead>
           <TableBody>
-            {employers.map((emp) => (
+            {dividEmp(employers).map((emp) => (
               <TableRow key={emp.email}>
-                <TableCell component='th' scope='row'>
-                  {emp.fullName}
+                <TableCell>
+                  {emp.fullName} <br /> {emp.email}
                 </TableCell>
-                <TableCell align='center'></TableCell>
-                <TableCell align='center'></TableCell>
-                <TableCell align='center'></TableCell>
+                <TableCell align='center'>{emp.email}</TableCell>
+                <TableCell align='center'>{emp.mobile}</TableCell>
+                <TableCell align='center'>{emp.department}</TableCell>
+                <TableCell align='right'>
+                  <Controls.ActionButton color='primary' onClick={handleEdit}>
+                    <EditIcon fontSize='small' />
+                  </Controls.ActionButton>
+                  <Controls.ActionButton color='secondary'>
+                    <CloseIcon fontSize='small' />
+                  </Controls.ActionButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <Button
-        variant='contained'
-        color='primary'
-        endIcon={<PersonAddIcon />}
-        onClick={() => dispatch({ type: 'TOGGLE_MODAL_FORM' })}
-      >
-        new employer
-      </Button>
-    </main>
+      {/* -----------------------START PAGINATION--------------------- */}
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component='div'
+        count={employers.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      {/*  ------------------------START POPUP------------------------ */}
+      <Popup title='Employee Form' openPopup={openPopup}>
+        <EmployeeForm />
+      </Popup>
+    </Paper>
   );
 }

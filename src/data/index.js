@@ -1,7 +1,3 @@
-const KEYS = {
-  employees: 'employees',
-  employeeId: 'employeeId',
-};
 
 export const genderItems = [
   { id: 'male', title: 'Male' },
@@ -14,6 +10,7 @@ export const getDepartmentCollection = () => [
   { id: '3', title: 'Accounting' },
   { id: '4', title: 'HR' },
 ];
+
 
 // export function insertEmployee(data) {
 //   let employees = getAllEmployees();
