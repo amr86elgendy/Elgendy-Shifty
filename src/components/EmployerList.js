@@ -7,23 +7,17 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
-  Toolbar,
-  InputAdornment,
   TableContainer,
   TablePagination,
   IconButton,
 } from '@material-ui/core';
-import Controls from '../services/Controls';
-import SwapVertIcon from '@material-ui/icons/SwapVert';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
 import { useAppContext } from '../context';
-import { Search } from '@material-ui/icons';
 import EditIcon from '@material-ui/icons/Edit';
 import CloseIcon from '@material-ui/icons/Close';
 import Popup from './Popup';
 import EmployeeForm from './EmployeeForm';
+import TableHeader from './TableHeader';
+import SearchAndAdd from './SearchAndAdd';
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -46,19 +40,14 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(5),
     padding: theme.spacing(3),
   },
-  searchInput: {
-    width: '75%',
-  },
-  newButton: {
-    position: 'absolute',
-    right: '10px',
-  },
 }));
 
 export default function BasicTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const { dispatch, employers, openPopup } = useAppContext();
+  const [activeEmp, setActiveEmp] = useState(0);
+  const { dispatch, filteredEmployers, openPopup } =
+    useAppContext();
   const classes = useStyles();
 
   const handleEdit = (id) => {
@@ -85,68 +74,20 @@ export default function BasicTable() {
 
   return (
     <Paper className={classes.pageContent}>
-      <Toolbar>
-        <Controls.Input
-          label='Search Employees'
-          className={classes.searchInput}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <Search />
-              </InputAdornment>
-            ),
-          }}
-          // onChange={handleSearch}
-        />
-        <Controls.Button
-          text='Add New'
-          // text='new employer'
-          variant='outlined'
-          startIcon={<AddIcon />}
-          // endIcon={<PersonAddIcon />}
-          className={classes.newButton}
-          onClick={() => dispatch({ type: 'TOGGLE_POPUP' })}
-        />
-      </Toolbar>
+      <SearchAndAdd />
       <TableContainer>
         <Table className={classes.table}>
           <TableHead>
-            <TableRow>
-              <TableCell>
-                <Button endIcon={<SwapVertIcon color='action' />}>name</Button>
-              </TableCell>
-              <TableCell align='center'>
-                <Button
-                  startIcon={<RemoveIcon className='icon' color='error' />}
-                  endIcon={<AddIcon className='icon' color='primary' />}
-                >
-                  Early Bird
-                </Button>
-              </TableCell>
-              <TableCell align='center'>
-                <Button
-                  startIcon={<RemoveIcon className='icon' color='error' />}
-                  endIcon={<AddIcon className='icon' color='primary' />}
-                >
-                  Night Bird
-                </Button>
-              </TableCell>
-              <TableCell align='center'>
-                <Button
-                  startIcon={<RemoveIcon className='icon' color='error' />}
-                  endIcon={<AddIcon className='icon' color='primary' />}
-                >
-                  W F H
-                </Button>
-              </TableCell>
-              <TableCell align='right'>
-                <Button>action</Button>
-              </TableCell>
-            </TableRow>
+            <TableHeader />
           </TableHead>
           <TableBody>
-            {dividEmp(employers).map((emp) => (
-              <TableRow key={emp.id}>
+            {dividEmp(filteredEmployers).map((emp, idx) => (
+              <TableRow
+                key={emp.id}
+                selected={activeEmp === idx ? true : false}
+                onClick={() => setActiveEmp(idx)}
+                hover
+              >
                 <TableCell>
                   {emp.fullName} <br /> {emp.department}
                 </TableCell>
@@ -154,18 +95,6 @@ export default function BasicTable() {
                 <TableCell align='center'>{emp.mobile}</TableCell>
                 <TableCell align='center'>{emp.department}</TableCell>
                 <TableCell align='right'>
-                  {/* <Controls.ActionButton
-                    color='primary'
-                    onClick={() => handleEdit(emp.id)}
-                  >
-                    <EditIcon fontSize='small' />
-                  </Controls.ActionButton> */}
-                  {/* <Controls.ActionButton
-                    color='secondary'
-                    onClick={() => handleRemove(emp.id)}
-                  >
-                    <CloseIcon fontSize='small' />
-                  </Controls.ActionButton> */}
                   <IconButton onClick={() => handleEdit(emp.id)}>
                     <EditIcon fontSize='small' color='primary' />
                   </IconButton>
@@ -182,7 +111,7 @@ export default function BasicTable() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component='div'
-        count={employers.length}
+        count={filteredEmployers.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

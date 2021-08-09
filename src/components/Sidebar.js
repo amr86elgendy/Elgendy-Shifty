@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { useAppContext } from '../context';
@@ -76,7 +75,6 @@ const Sidebar = () => {
           <CloseIcon />
         </IconButton>
       </div>
-      <Divider />
       <Paper className={classes.paper}>
         <Typography variant='h2' color='primary'>
           {`${day} / ${month}`}

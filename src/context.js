@@ -24,14 +24,35 @@ const reducer = (state, action) => {
     case 'TOGGLE_POPUP':
       return { ...state, openPopup: !state.openPopup };
     case 'SET_EMPLOYERS':
-      return { ...state, employers: action.payload };
+      return {
+        ...state,
+        employers: action.payload,
+        filteredEmployers: action.payload,
+      };
     case 'ADD_NEW_EMPLOYER':
-      return { ...state, employers: [...state.employers, action.payload] };
+      return {
+        ...state,
+        employers: [...state.employers, action.payload],
+        filteredEmployers: [...state.employers, action.payload],
+      };
     case 'REMOVE_EMPLOYER':
       const employersAfterRemoving = state.employers.filter(
         (emp) => emp.id !== action.payload
       );
-      return { ...state, employers: [...employersAfterRemoving] };
+      return {
+        ...state,
+        employers: [...employersAfterRemoving],
+        filteredEmployers: [...employersAfterRemoving],
+      };
+    case 'UPDATE_FILTER_TEXT':
+      return { ...state, filterText: action.payload };
+    case 'FILTER_EMPLOYERS':
+      const { employers, filterText } = state;
+      let arr = [...employers];
+      arr = arr.filter((emp) =>
+        emp.fullName.toLowerCase().startsWith(filterText.toLowerCase())
+      );
+      return { ...state, filteredEmployers: arr };
     default:
       return state;
   }
@@ -44,6 +65,8 @@ const initialState = {
   displayedDate: new Date().toDateString(),
   employerEdited: null,
   employers: [],
+  filteredEmployers: [],
+  filterText: '',
 };
 
 // create context
@@ -68,6 +91,10 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('employers', JSON.stringify(state.employers));
   }, [state.employers]);
+
+  useEffect(() => {
+    dispatch({ type: 'FILTER_EMPLOYERS' });
+  }, [state.filterText]);
 
   return (
     <AppContext.Provider value={{ ...state, dispatch, thisMonth }}>
