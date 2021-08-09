@@ -47,6 +47,8 @@ const SearchAndAdd = () => {
       <Button
         startIcon={<AddIcon />}
         variant='contained'
+        disableElevation
+        // variant='outlined'
         size='large'
         color='primary'
         onClick={() => dispatch({ type: 'TOGGLE_POPUP' })}

@@ -6,7 +6,6 @@ import { useAppContext } from '../context';
 import { v4 as uuidv4 } from 'uuid';
 
 const initialFValues = {
-  id: uuidv4(),
   fullName: '',
   email: '',
   mobile: '',
@@ -27,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 const EmployeeForm = () => {
   const classes = useStyles();
-  const [values, setValues] = useState(initialFValues);
+  let [values, setValues] = useState(initialFValues);
   const [errors, setErrors] = useState({});
   const { dispatch, employerEdited } = useAppContext();
 
@@ -79,6 +78,7 @@ const EmployeeForm = () => {
       }
     } else {
       if (validate(values)) {
+        values.id = uuidv4();
         dispatch({ type: 'ADD_NEW_EMPLOYER', payload: values });
         resetForm();
         dispatch({ type: 'TOGGLE_POPUP' });

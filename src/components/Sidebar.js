@@ -45,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     margin: '1rem auto',
+    backgroundColor: theme.palette.primary.main,
+    color: 'white'
   },
   picker: {
     display: 'flex',
@@ -76,10 +78,10 @@ const Sidebar = () => {
         </IconButton>
       </div>
       <Paper className={classes.paper}>
-        <Typography variant='h2' color='primary'>
+        <Typography variant='h2'>
           {`${day} / ${month}`}
         </Typography>
-        <Typography variant='h5' color='primary'>
+        <Typography variant='h5'>
           {displayedDate.split(' ')[0]}
         </Typography>
       </Paper>

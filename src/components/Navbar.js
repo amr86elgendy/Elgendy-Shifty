@@ -26,7 +26,7 @@ export default function ButtonAppBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" elevation={0}>
         <Toolbar>
           <IconButton className={classes.userIcon} color="inherit">
             <GroupAddIcon fontSize="large" />
