@@ -1,7 +1,32 @@
-
-
-
 .icon:hover {
-    transform: rotate(180deg);
-    transition: transform 0.5s ease-in-out;
-  }
+  transform: rotate(180deg);
+  transition: transform 0.5s ease-in-out;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+}
+.day:not(:last-of-type) {
+  margin-right: 0.4rem;
+}
+.day span:first-child {
+  width: 25px;
+  height: 25px;
+  border-radius: 10px 10px 10px 10px;
+  display: block;
+  background-color:  #3c6382;
+  border: 1px solid #3c6382;
+  color: white;
+  font-size: 1.4rem;
+}
+.day span:first-child.sat {
+  background-color:  white;
+  color: #3c6382;
+}
+.day span:last-child {
+  display: block;
+  font-size: 1.4rem;
+  color: #3c6382;
+  text-transform: capitalize;
+}

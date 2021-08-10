@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 const Sidebar = () => {
   const classes = useStyles();
 
-  const { dispatch, displayedDate, sidebarOpen } = useAppContext();
+  const { dispatch, displayedDate, openSidebar } = useAppContext();
   const day = displayedDate.split(' ')[2];
   const month = new Date(displayedDate).toLocaleDateString().split('/')[0];
 
@@ -67,7 +67,7 @@ const Sidebar = () => {
       className={classes.drawer}
       variant='temporary'
       anchor='right'
-      open={sidebarOpen}
+      open={openSidebar}
       classes={{
         paper: classes.drawerPaper,
       }}

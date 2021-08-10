@@ -51,7 +51,7 @@ const SearchAndAdd = () => {
         // variant='outlined'
         size='large'
         color='primary'
-        onClick={() => dispatch({ type: 'TOGGLE_POPUP' })}
+        onClick={() => dispatch({ type: 'TOGGLE_FORM_POPUP' })}
         classes={{ root: classes.btnRoot }}
       >
         Add New

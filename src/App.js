@@ -6,7 +6,7 @@ import Sidebar from './components/Sidebar';
 const theme = createTheme({
   palette: {
     background: {
-      default: '#f4f5fd',
+      default: '#f6f6f6',
     },
   },
 });

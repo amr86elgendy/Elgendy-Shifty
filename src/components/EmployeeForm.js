@@ -11,7 +11,9 @@ const initialFValues = {
   mobile: '',
   gender: 'male',
   department: '',
-  // hireDate: new Date(),
+  early: [],
+  night: [],
+  whf: [],
   isPermanent: false,
 };
 
@@ -74,15 +76,15 @@ const EmployeeForm = () => {
         console.log('edit');
         dispatch({ type: 'SET_EMPLOYERS_AFTER_EDIT', payload: values });
         resetForm();
-        dispatch({ type: 'TOGGLE_POPUP' });
+        dispatch({ type: 'TOGGLE_FORM_POPUP' });
       }
     } else {
-      if (validate(values)) {
+      // if (validate(values)) {
         values.id = uuidv4();
         dispatch({ type: 'ADD_NEW_EMPLOYER', payload: values });
         resetForm();
-        dispatch({ type: 'TOGGLE_POPUP' });
-      }
+        dispatch({ type: 'TOGGLE_FORM_POPUP' });
+      
     }
   };
 

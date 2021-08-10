@@ -21,14 +21,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Popup(props) {
+export default function FormPopup(props) {
   const { dispatch } = useAppContext();
-  const { title, children, openPopup } = props;
+  const { title, children, openForm } = props;
   const classes = useStyles();
 
   return (
     <Dialog
-      open={openPopup}
+      open={openForm}
       maxWidth='md'
       classes={{ paper: classes.dialogWrapper }}
     >
@@ -39,7 +39,7 @@ export default function Popup(props) {
           </Typography>
           <IconButton
             onClick={() => {
-              dispatch({ type: 'TOGGLE_POPUP' });
+              dispatch({ type: 'TOGGLE_FORM_POPUP' });
               dispatch({ type: 'REMOVE_EMPLOYER_FROM_EDIT' });
             }}
           >
