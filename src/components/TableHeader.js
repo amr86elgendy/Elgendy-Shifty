@@ -6,73 +6,132 @@ import { useAppContext } from '../context';
 import { checkDayOutOfBird, checkDayOutOfNumber } from '../functions';
 
 const TableHeader = () => {
-  const { activeEmp, displayedDate, dispatch, employers, thisMonth } =
-    useAppContext();
+  const {
+    activeEmp,
+    displayedDate,
+    dispatch,
+    employers,
+    filteredEmployers,
+    thisMonth,
+  } = useAppContext();
 
+  // Function Add Day
   function addDay(bird, otherBird) {
-    if (employers.length === 0) {
-      alert('There is no employers, Please add an employer!');
+    if (filteredEmployers.length === 0) {
+      dispatch({
+        type: 'OPEN_ALERT',
+        payload: {
+          isOpen: true,
+          message: 'There is no employers, Please add an employer!',
+        },
+      });
       return;
     }
     if (!thisMonth) {
-      alert('this is another Month');
+      dispatch({
+        type: 'OPEN_ALERT',
+        payload: {
+          isOpen: true,
+          message: 'This is another Month',
+        },
+      });
       return;
     }
     if (displayedDate.startsWith('Fri')) {
-      alert('Sorry This Day is Friday');
+      dispatch({
+        type: 'OPEN_ALERT',
+        payload: {
+          isOpen: true,
+          message: 'Sorry This Day is Friday',
+        },
+      });
       return;
     }
-    if (checkDayOutOfBird(employers, activeEmp, displayedDate, otherBird)) {
-      alert('This Employer has this day in another Bird');
+    if (
+      checkDayOutOfBird(filteredEmployers, activeEmp, displayedDate, otherBird)
+    ) {
+      dispatch({
+        type: 'OPEN_ALERT',
+        payload: {
+          isOpen: true,
+          message: 'This Employer has this day in another Bird',
+        },
+      });
       return;
     }
-    if (checkDayOutOfNumber(employers, displayedDate, bird) >= 4) {
-      alert('This Day is full of employers in this bird');
+    if (checkDayOutOfNumber(filteredEmployers, displayedDate, bird) >= 4) {
+      dispatch({
+        type: 'OPEN_ALERT',
+        payload: {
+          isOpen: true,
+          message: 'This Day is full of employers in this bird',
+        },
+      });
       return;
     }
-    const existed = employers[activeEmp][bird].find(
+    const existed = filteredEmployers[activeEmp][bird].find(
       (day) => day === displayedDate
     );
     if (existed) {
-      alert('This Day is already existed');
+      dispatch({
+        type: 'OPEN_ALERT',
+        payload: {
+          isOpen: true,
+          message: 'This Day is already existed',
+        },
+      });
       return;
     }
     if (bird === 'whf') {
-      if (employers[activeEmp][bird].length === 3) {
-        alert('This Employer has 3 days Working From Home');
+      if (filteredEmployers[activeEmp][bird].length === 3) {
+        dispatch({
+          type: 'OPEN_ALERT',
+          payload: {
+            isOpen: true,
+            message: 'This Employer has 3 days(max) Working From Home',
+          },
+        });
         return;
       }
     }
-    if (employers[activeEmp][bird].length === 6) {
-      alert('This Employer has 6 days(Max) in this bird');
+    if (filteredEmployers[activeEmp][bird].length === 6) {
+      dispatch({
+        type: 'OPEN_ALERT',
+        payload: {
+          isOpen: true,
+          message: 'This Employer has 6 days(Max) in this bird',
+        },
+      });
       return;
     }
-    const updateEmployers = employers.map((emp, index) =>
-      index === activeEmp
-        ? {
-            ...emp,
-            [bird]: [...emp[bird], displayedDate].sort(
-              (a, b) => a.split(' ')[2] - b.split(' ')[2]
-            ),
-          }
-        : emp
+
+    let updatedEmp = filteredEmployers[activeEmp];
+    updatedEmp[bird] = [...updatedEmp[bird], displayedDate].sort(
+      (a, b) => a.split(' ')[2] - b.split(' ')[2]
     );
-    dispatch({ type: 'SET_EMPLOYERS', payload: updateEmployers });
+
+    const newEmployers = employers.map((emp) =>
+      emp.id === updatedEmp.id ? updatedEmp : emp
+    );
+
+    dispatch({ type: 'SET_EMPLOYERS', payload: newEmployers });
   }
 
   // Function Remove Day
   function removeDay(bird) {
-    if (employers.length === 0) {
+    if (filteredEmployers.length === 0) {
       alert('There is no employers, Please add an employer!');
       return;
     }
-    const updateEmployers = employers.map((emp, index) =>
+    const updateEmployers = filteredEmployers.map((emp, index) =>
       index === activeEmp
         ? { ...emp, [bird]: emp[bird].slice(0, emp[bird].length - 1) }
         : emp
     );
+
     dispatch({ type: 'SET_EMPLOYERS', payload: updateEmployers });
   }
+
   return (
     <TableRow>
       <TableCell>

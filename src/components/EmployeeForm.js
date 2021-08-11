@@ -73,18 +73,17 @@ const EmployeeForm = () => {
     e.preventDefault();
     if (employerEdited) {
       if (validate(values)) {
-        console.log('edit');
         dispatch({ type: 'SET_EMPLOYERS_AFTER_EDIT', payload: values });
         resetForm();
         dispatch({ type: 'TOGGLE_FORM_POPUP' });
       }
     } else {
-      // if (validate(values)) {
+      if (validate(values)) {
         values.id = uuidv4();
         dispatch({ type: 'ADD_NEW_EMPLOYER', payload: values });
         resetForm();
         dispatch({ type: 'TOGGLE_FORM_POPUP' });
-      
+      }
     }
   };
 
@@ -137,12 +136,6 @@ const EmployeeForm = () => {
             options={employeeService.getDepartmentCollection()}
             error={errors.department}
           />
-          {/* <Controls.DatePicker
-            name='hireDate'
-            label='Hire Date'
-            value={values.hireDate}
-            onChange={handleInputChange}
-          /> */}
           <Controls.Checkbox
             name='isPermanent'
             label='Permanent Employee'

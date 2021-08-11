@@ -33,7 +33,15 @@ const reducer = (state, action) => {
       );
       return { ...state, employers: [...employersAfterRemoving] };
     case 'UPDATE_FILTER_TEXT':
-      return { ...state, filterText: action.payload };
+      return { ...state, filterText: action.payload, activeEmp: 0 };
+    case 'FILTER_EMPLOYERS':
+      const employersAfterFiltered = state.employers.filter((one) =>
+        one.fullName.startsWith(state.filterText)
+      );
+      return {
+        ...state,
+        filteredEmployers: [...employersAfterFiltered],
+      };
     case 'SET_ACTIVE_EMP':
       return {
         ...state,
@@ -44,6 +52,10 @@ const reducer = (state, action) => {
             ? state.employers.length - 1
             : action.payload,
       };
+    case 'OPEN_ALERT':
+      return { ...state, alert: action.payload };
+    case 'CLOSE_ALERT':
+      return { ...state, alert: { isOpen: false, message: '' } };
     default:
       return state;
   }
@@ -55,9 +67,40 @@ const initialState = {
   openForm: false,
   displayedDate: new Date().toDateString(),
   employerEdited: null,
-  employers: [],
+  employers: [
+    {
+      id: 'dasfjkhaskghkaguy',
+      fullName: 'amr elgendy',
+      email: 'amr@tawfik.com',
+      mobile: '01005712891',
+      gender: 'male',
+      department: 'Development',
+      early: [],
+      night: [],
+      whf: [],
+      isPermanent: true,
+    },
+    {
+      id: 'kajsfjasdkilugiurkl',
+      fullName: 'john doe',
+      email: 'john@doe.com',
+      mobile: '01005712891',
+      gender: 'male',
+      department: 'Marketing',
+      early: [],
+      night: [],
+      whf: [],
+      isPermanent: true,
+    },
+  ],
+  filteredEmployers: [],
   filterText: '',
   activeEmp: 0,
+  alert: {
+    isOpen: false,
+    title: '',
+    subTitle: '',
+  },
 };
 
 // create context
@@ -82,6 +125,10 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('employers', JSON.stringify(state.employers));
   }, [state.employers]);
+
+  useEffect(() => {
+    dispatch({ type: 'FILTER_EMPLOYERS' });
+  }, [state.filterText, state.employers]);
 
   return (
     <AppContext.Provider value={{ ...state, dispatch, thisMonth }}>

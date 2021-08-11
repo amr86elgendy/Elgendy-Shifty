@@ -1,4 +1,5 @@
 import { createTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
+import AlertPopup from './components/Alert';
 import EmployerList from './components/EmployerList';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
@@ -17,6 +18,7 @@ function App() {
       <Navbar />
       <Sidebar />
       <EmployerList />
+      <AlertPopup />
       <CssBaseline />
     </ThemeProvider>
   );

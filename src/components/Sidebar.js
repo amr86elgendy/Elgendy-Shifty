@@ -65,7 +65,7 @@ const Sidebar = () => {
   return (
     <Drawer
       className={classes.drawer}
-      variant='temporary'
+      variant='persistent'
       anchor='right'
       open={openSidebar}
       classes={{
@@ -78,12 +78,8 @@ const Sidebar = () => {
         </IconButton>
       </div>
       <Paper className={classes.paper}>
-        <Typography variant='h2'>
-          {`${day} / ${month}`}
-        </Typography>
-        <Typography variant='h5'>
-          {displayedDate.split(' ')[0]}
-        </Typography>
+        <Typography variant='h2'>{`${day} / ${month}`}</Typography>
+        <Typography variant='h5'>{displayedDate.split(' ')[0]}</Typography>
       </Paper>
       <div className={classes.picker}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>

@@ -2,7 +2,12 @@
   transform: rotate(180deg);
   transition: transform 0.5s ease-in-out;
 }
-
+.days-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .day {
   display: flex;
   flex-direction: column;
@@ -11,14 +16,16 @@
   margin-right: 0.4rem;
 }
 .day span:first-child {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   border-radius: 10px 10px 10px 10px;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color:  #3c6382;
   border: 1px solid #3c6382;
   color: white;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 }
 .day span:first-child.sat {
   background-color:  white;

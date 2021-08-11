@@ -15,7 +15,7 @@ import EmployerItem from './EmployerItem';
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    minWidth: 800,
+    minWidth: 900,
     marginTop: theme.spacing(3),
     '& thead th button span': {
       fontWeight: '600',
@@ -35,7 +35,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function BasicTable() {
-  const { employers, filterText, openForm } = useAppContext();
+  const { filteredEmployers, openForm } =
+    useAppContext();
   const classes = useStyles();
 
   return (
@@ -47,15 +48,9 @@ export default function BasicTable() {
             <TableHeader />
           </TableHead>
           <TableBody>
-            {filterText
-              ? employers
-                  .filter((emp) => emp.fullName.startsWith(filterText))
-                  .map((emp, idx) => (
-                    <EmployerItem key={emp.id} {...emp} idx={idx} />
-                  ))
-              : employers.map((emp, idx) => (
-                  <EmployerItem key={emp.id} {...emp} idx={idx} />
-                ))}
+            {filteredEmployers.map((emp, idx) => (
+              <EmployerItem key={emp.id} {...emp} idx={idx} />
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
