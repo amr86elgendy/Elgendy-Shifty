@@ -19,7 +19,7 @@ const SearchAndAdd = () => {
     },
     btnRoot: {
       position: 'absolute',
-      right: '10px',
+      right: matches ? '10px' : '0',
       margin: theme.spacing(0.5),
     },
   }));

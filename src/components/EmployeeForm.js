@@ -97,7 +97,7 @@ const EmployeeForm = () => {
   return (
     <form className={classes.root} autoComplete='off' onSubmit={handleSubmit}>
       <Grid container>
-        <Grid item xs={6}>
+        <Grid item md={6}>
           <Controls.Input
             name='fullName'
             label='Full Name'
@@ -120,7 +120,7 @@ const EmployeeForm = () => {
             error={errors.mobile}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item md={6}>
           <Controls.RadioGroup
             name='gender'
             label='Gender'
